@@ -1,0 +1,59 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --color-primary: #0866ff; /* Nouveau bleu Facebook */
+  --color-primary-content: #ffffff;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #f0f2f5; /* Fond principal FB */
+  --color-base-300: #e4e6eb; /* Boutons secondaires / Hover FB */
+  --color-base-content: #050505;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md:
+    0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1); /* Ombre de modal FB */
+}
+
+@layer base {
+  body {
+    @apply bg-base-200 text-base-content font-sans antialiased text-[15px];
+  }
+}
+
+/* Custom Facebook-like classes */
+.fb-card {
+  @apply bg-base-100 rounded-lg border border-[#CED0D4] shadow-none;
+}
+
+.fb-text-secondary {
+  @apply text-[#65676B];
+}
+/* SLIDE ALLER (vers la gauche) */
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.slide-left-enter-from {
+  transform: translateX(100%);
+}
+.slide-left-leave-to {
+  transform: translateX(-100%);
+}
+
+/* SLIDE RETOUR (vers la droite) */
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.slide-right-enter-from {
+  transform: translateX(-100%);
+}
+.slide-right-leave-to {
+  transform: translateX(100%);
+}
