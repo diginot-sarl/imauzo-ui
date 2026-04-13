@@ -13,27 +13,30 @@ import MenuDivider from '../components/ui/MenuDivider.vue'
 import { DollarSign, Users, Activity, FileText, Briefcase } from 'lucide-vue-next'
 
 const tableColumnsSimple = [
-  { key: 'id', label: 'ID' },
-  { key: 'name', label: 'Client' },
-  { key: 'amount', label: 'Montant', align: 'right' as const },
-  { key: 'status', label: 'Statut', align: 'center' as const }
+  { key: 'id', label: 'ID', sortable: true },
+  { key: 'name', label: 'Client', sortable: true, filterable: true },
+  { key: 'amount', label: 'Montant', align: 'right' as const, sortable: true },
+  { key: 'status', label: 'Statut', align: 'center' as const, filterable: true }
 ]
 
 const tableDataSimple = [
-  { id: '#1023', name: 'Acme Corp', amount: '1 250 $', status: 'Payé' },
-  { id: '#1024', name: 'Global Tech', amount: '850 $', status: 'En attente' }
+  { id: '#1023', name: 'Acme Corp', amount: 1250, status: 'Payé' },
+  { id: '#1024', name: 'Global Tech', amount: 850, status: 'En attente' },
+  { id: '#1025', name: 'Stark Industries', amount: 3400, status: 'Payé' },
+  { id: '#1026', name: 'Wayne Enterprises', amount: 12000, status: 'En attente' }
 ]
 
 const tableColumns = [
-  { key: 'user', label: 'Utilisateur' },
-  { key: 'role', label: 'Rôle' },
-  { key: 'status', label: 'Statut' },
+  { key: 'name', label: 'Utilisateur', sortable: true },
+  { key: 'role', label: 'Rôle', sortable: true, filterable: true },
+  { key: 'status', label: 'Statut', sortable: true },
   { key: 'actions', label: '', align: 'right' as const }
 ]
 
 const tableData = [
   { id: 1, name: 'Alice Dubois', email: 'alice@imauzo.com', avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d', role: 'Admin', status: 'Actif' },
   { id: 2, name: 'Marc Leroi', email: 'marc@imauzo.com', avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d', role: 'Viewer', status: 'En attente' },
+  { id: 3, name: 'Sophie Martin', email: 'sophie@imauzo.com', avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704e', role: 'Éditeur', status: 'Actif' },
 ]
 </script>
 
@@ -69,6 +72,9 @@ const tableData = [
             <div>
                 <Heading level="5" class="mb-2">Basique (Striped)</Heading>
                 <DataTable :columns="tableColumnsSimple" :data="tableDataSimple" striped>
+                    <template #cell-amount="{ value }">
+                        <span class="font-medium">{{ value.toLocaleString('fr-FR') }} $</span>
+                    </template>
                     <template #cell-status="{ value }">
                         <Badge :variant="value === 'Payé' ? 'success' : 'warning'">{{ value }}</Badge>
                     </template>
@@ -78,7 +84,7 @@ const tableData = [
             <div>
                 <Heading level="5" class="mb-2">Avancé (Custom Slots)</Heading>
                 <DataTable :columns="tableColumns" :data="tableData">
-                    <template #cell-user="{ row }">
+                    <template #cell-name="{ row }">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden"><img :src="row.avatar" /></div>
                             <div><div class="font-bold">{{ row.name }}</div><div class="text-xs text-gray-500">{{ row.email }}</div></div>
