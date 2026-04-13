@@ -20,6 +20,25 @@ import MultiUploadInput from './components/ui/MultiUploadInput.vue'
 import DocumentInput from './components/ui/DocumentInput.vue'
 import { Briefcase, CreditCard } from 'lucide-vue-next'
 import { Home, Bell, Search, ArrowLeft, Eye, ThumbsUp } from 'lucide-vue-next'
+import Heading from './components/ui/Heading.vue'
+import Text from './components/ui/Text.vue'
+import Menu from './components/ui/Menu.vue'
+import MenuItem from './components/ui/MenuItem.vue'
+import MenuDivider from './components/ui/MenuDivider.vue'
+import ConfirmDialog from './components/ui/ConfirmDialog.vue'
+import HeaderWidget from './components/ui/HeaderWidget.vue'
+import TimeSlotSelector from './components/ui/TimeSlotSelector.vue'
+import DocumentPreview from './components/ui/DocumentPreview.vue'
+import ImagePreview from './components/ui/ImagePreview.vue'
+import Icon from './components/ui/Icon.vue'
+import InvoiceTemplate from './components/ui/InvoiceTemplate.vue'
+import InfoCard from './components/ui/InfoCard.vue'
+import Editor from './components/ui/Editor.vue'
+import SuccessWidget from './components/ui/SuccessWidget.vue'
+import PaymentButton from './components/ui/PaymentButton.vue'
+import Link from './components/ui/Link.vue'
+import Section from './components/ui/Section.vue'
+import Separator from './components/ui/Separator.vue'
 import Layout from './components/ui/Layout.vue'
 import Navbar from './components/ui/Navbar.vue'
 import NavbarItem from './components/ui/NavbarItem.vue'
@@ -37,8 +56,26 @@ import Loader from './components/ui/Loader.vue'
 import CircleProgress from './components/ui/CircleProgress.vue'
 import ListTile from './components/ui/ListTile.vue'
 import DataTable from './components/ui/DataTable.vue'
+import Badge from './components/ui/Badge.vue'
+import Accordion from './components/ui/Accordion.vue'
+import DropdownButton from './components/ui/DropdownButton.vue'
+import Popover from './components/ui/Popover.vue'
 
 
+
+const selectedTime = ref('10:00')
+const timeSlots = [
+  { time: '08:00', available: false },
+  { time: '09:00', available: true },
+  { time: '10:00', available: true },
+  { time: '11:00', available: true },
+  { time: '14:00', available: true },
+  { time: '15:00', available: false },
+]
+const editorContent = ref('')
+const showConfirm = ref(false)
+const showDocPreview = ref(false)
+const showImagePreview = ref(false)
 const showModal = ref(false)
 const showSnackbar = ref(false)
 const isLoading = ref(false)
@@ -62,17 +99,31 @@ const numVal = ref<number | null>(null)
 const checkVal = ref(true)
 const radioVal = ref('option1')
 
-const tableColumns = [
+const tableColumnsSimple = [
   { key: 'id', label: 'ID' },
   { key: 'name', label: 'Client' },
   { key: 'amount', label: 'Montant', align: 'right' as const },
   { key: 'status', label: 'Statut', align: 'center' as const }
 ]
 
-const tableData = [
+const tableDataSimple = [
   { id: '#1023', name: 'Acme Corp', amount: '1 250 $', status: 'Payé' },
   { id: '#1024', name: 'Global Tech', amount: '850 $', status: 'En attente' },
   { id: '#1025', name: 'StartUp Inc', amount: '3 400 $', status: 'Payé' }
+]
+
+const tableColumns = [
+  { key: 'user', label: 'Utilisateur' },
+  { key: 'role', label: 'Rôle' },
+  { key: 'status', label: 'Statut' },
+  { key: 'lastLogin', label: 'Dernière connexion' },
+  { key: 'actions', label: '', align: 'right' as const }
+]
+
+const tableData = [
+  { id: 1, name: 'Alice Dubois', email: 'alice@imauzo.com', avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d', role: 'Admin', status: 'Actif', lastLogin: 'Il y a 2h' },
+  { id: 2, name: 'Marc Leroi', email: 'marc@imauzo.com', avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d', role: 'Éditeur', status: 'En attente', lastLogin: 'Hier' },
+  { id: 3, name: 'Julie Martin', email: 'julie@imauzo.com', avatar: 'https://i.pravatar.cc/150?u=a04258114e29026702d', role: 'Viewer', status: 'Inactif', lastLogin: '12/10/2023' },
 ]
 const switchVal = ref(false)
 
@@ -148,7 +199,7 @@ const triggerLoading = () => {
         <div v-if="menuState === 'main'" class="absolute inset-0 w-full h-full bg-[#FFFFFF] overflow-y-auto" key="main">
           <Sidebar class="w-full">
             <div class="px-3 pt-4 pb-4">
-              <h2 class="font-bold text-lg text-[#050505] leading-tight">Tableau de bord<br />professionnel</h2>
+              <Heading level="3" class="leading-tight">Tableau de bord<br />professionnel</Heading>
             </div>
             <SidebarItem title="Accueil" :icon="Home" active />
             <SidebarItem title="Statistiques" :icon="Activity" hasSubmenu @click="goTo('stats')" />
@@ -170,7 +221,7 @@ const triggerLoading = () => {
               </button>
             </div>
             <div class="px-3 pb-4 pt-1">
-              <h2 class="font-bold text-2xl text-[#050505]">Statistiques</h2>
+              <Heading level="1">Statistiques</Heading>
             </div>
 
             <SidebarItem title="Vues" :icon="Eye" active />
@@ -186,7 +237,7 @@ const triggerLoading = () => {
       <div class="max-w-6xl mx-auto mt-8 px-4 space-y-8">
         <!-- Section: Stats Cards -->
         <section>
-          <h2 class="text-xl font-bold mb-4 fb-text-secondary uppercase text-sm">Vue d'ensemble</h2>
+          <Heading level="4" variant="section" class="mb-4">Vue d'ensemble</Heading>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatsCard label="Revenus totaux" value="12 450 $" :trend="12.5" :icon="DollarSign"
               trendLabel="ce mois-ci" />
@@ -197,243 +248,511 @@ const triggerLoading = () => {
           </div>
         </section>
 
-        <div class="lg:col-span-2 space-y-8">
-          <!-- Section: Inputs -->
-          <section>
-            <Card>
-              <template #header>
-                <h2 class="text-lg font-bold">Inputs & Contrôles</h2>
-              </template>
+        <!-- Main Content Area Grid -->
+        <div>
+          <div class="space-y-8">
+            <!-- Section: Inputs -->
+            <section>
+              <Card>
+                <template #header>
+                  <Heading level="3">Inputs & Contrôles</Heading>
+                </template>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- Text Inputs -->
-                <div class="space-y-4">
-                  <TextInput v-model="textVal" label="Nom complet" placeholder="Ex: John Doe" required />
-                  <SearchInput v-model="searchVal" placeholder="Rechercher des clients..." />
-                  <NumberInput v-model="numVal" label="Montant ($)" placeholder="0.00"
-                    hint="Entrez une valeur positive" />
-                </div>
-
-                <!-- Toggles & Radios -->
-                <div class="space-y-4">
-                  <div class="bg-[#F0F2F5] p-4 rounded-lg space-y-2">
-                    <h3 class="font-semibold text-sm mb-2">Options</h3>
-                    <Checkbox v-model="checkVal" label="Activer les notifications"
-                      hint="Vous recevrez un email à chaque vente." />
-                    <Switch v-model="switchVal" label="Mode sombre" hint="Disponible uniquement en bêta" />
-                  </div>
-
-                  <div class="bg-[#F0F2F5] p-4 rounded-lg space-y-2">
-                    <h3 class="font-semibold text-sm mb-2">Choisir un plan</h3>
-                    <Radio v-model="radioVal" value="option1" name="plan" label="Plan Basique"
-                      hint="Gratuit pour 1 magasin" />
-                    <Radio v-model="radioVal" value="option2" name="plan" label="Plan Premium" hint="29.99$/mois" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 pt-6 border-t border-[#CED0D4]">
-                <!-- Selects -->
-                <div class="space-y-4">
-                  <Select v-model="selectVal" :options="selectOptions" label="Type de compte" />
-                  <MegaSelect v-model="megaSelectVal" :options="megaSelectOptions" label="Abonnement"
-                    hint="Vous pourrez changer plus tard" />
-                </div>
-
-                <!-- Multi Selects & Tags -->
-                <div class="space-y-4">
-                  <MultiSelect v-model="multiSelectVal" :options="multiOptions" label="Départements" />
-                  <TextTagInput v-model="tagsVal" label="Tags associés" hint="Appuyez sur Entrée pour ajouter" />
-                </div>
-              </div>
-
-              <!-- Uploads -->
-              <div class="mt-6 pt-6 border-t border-[#CED0D4] space-y-6">
-                <h3 class="font-semibold text-sm">Fichiers & Documents</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <!-- Text Inputs -->
                   <div class="space-y-4">
-                    <UploadInput v-model="uploadVal" label="Photo de profil" accept="image/*"
-                      hint="JPG, PNG. Max 5MB." />
-                    <MultiUploadInput v-model="multiUploadVal" label="Pièces jointes" accept=".pdf,.doc,.docx" />
+                    <TextInput v-model="textVal" label="Nom complet" placeholder="Ex: John Doe" required />
+                    <SearchInput v-model="searchVal" placeholder="Rechercher des clients..." />
+                    <NumberInput v-model="numVal" label="Montant ($)" placeholder="0.00"
+                      hint="Entrez une valeur positive" />
                   </div>
+
+                  <!-- Toggles & Radios -->
+                  <div class="space-y-4">
+                    <div class="bg-[#F0F2F5] p-4 rounded-lg space-y-2">
+                      <Heading level="5" class="mb-2">Options</Heading>
+                      <Checkbox v-model="checkVal" label="Activer les notifications"
+                        hint="Vous recevrez un email à chaque vente." />
+                      <Switch v-model="switchVal" label="Mode sombre" hint="Disponible uniquement en bêta" />
+                    </div>
+
+                    <div class="bg-[#F0F2F5] p-4 rounded-lg space-y-2">
+                      <Heading level="5" class="mb-2">Choisir un plan</Heading>
+                      <Radio v-model="radioVal" value="option1" name="plan" label="Plan Basique"
+                        hint="Gratuit pour 1 magasin" />
+                      <Radio v-model="radioVal" value="option2" name="plan" label="Plan Premium" hint="29.99$/mois" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 pt-6 border-t border-[#CED0D4]">
+                  <!-- Selects -->
+                  <div class="space-y-4">
+                    <Select v-model="selectVal" :options="selectOptions" label="Type de compte" />
+                    <MegaSelect v-model="megaSelectVal" :options="megaSelectOptions" label="Abonnement"
+                      hint="Vous pourrez changer plus tard" />
+                  </div>
+
+                  <!-- Multi Selects & Tags -->
+                  <div class="space-y-4">
+                    <MultiSelect v-model="multiSelectVal" :options="multiOptions" label="Départements" />
+                    <TextTagInput v-model="tagsVal" label="Tags associés" hint="Appuyez sur Entrée pour ajouter" />
+                  </div>
+                </div>
+
+                <!-- Uploads -->
+                <div class="mt-6 pt-6 border-t border-[#CED0D4] space-y-6">
+                  <Heading level="5">Fichiers & Documents</Heading>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                      <UploadInput v-model="uploadVal" label="Photo de profil" accept="image/*"
+                        hint="JPG, PNG. Max 5MB." />
+                      <MultiUploadInput v-model="multiUploadVal" label="Pièces jointes" accept=".pdf,.doc,.docx" />
+                    </div>
+                    <div>
+                      <DocumentInput v-model="docUploadVal" label="Contrat Signé" accept=".pdf" :maxSizeMB="10" />
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </section>
+
+            <!-- Section: Navigation Complémentaire -->
+            <section>
+              <Card>
+                <template #header>
+                  <Heading level="3">Navigation Complémentaire</Heading>
+                </template>
+
+                <div class="space-y-8">
+                  <!-- Breadcrumb -->
                   <div>
-                    <DocumentInput v-model="docUploadVal" label="Contrat Signé" accept=".pdf" :maxSizeMB="10" />
+                    <Heading level="5" variant="section" class="mb-2">Fil d'Ariane (Breadcrumb)</Heading>
+                    <Breadcrumb :items="breadcrumbItems" />
                   </div>
-                </div>
-              </div>
-            </Card>
-          </section>
 
-          <!-- Section: Navigation Complémentaire -->
-          <section>
-            <Card>
-              <template #header>
-                <h2 class="text-lg font-bold">Navigation Complémentaire</h2>
-              </template>
-
-              <div class="space-y-8">
-                <!-- Breadcrumb -->
-                <div>
-                  <h3 class="font-semibold text-sm mb-2 text-[#65676B]">Fil d'Ariane (Breadcrumb)</h3>
-                  <Breadcrumb :items="breadcrumbItems" />
-                </div>
-
-                <!-- Tabs -->
-                <div>
-                  <h3 class="font-semibold text-sm mb-4 text-[#65676B]">Onglets (Tabs)</h3>
-                  <div class="space-y-6">
-                    <div>
-                      <span class="text-xs text-[#65676B] mb-2 block font-medium uppercase tracking-wider">Style Bordure
-                        (Classic)</span>
-                      <Tabs v-model="tabVal" :options="tabOptions" />
-                    </div>
-                    <div>
-                      <span class="text-xs text-[#65676B] mb-2 block font-medium uppercase tracking-wider">Style Pilule
-                        (Insights)</span>
-                      <Tabs v-model="tabValPills" :options="tabOptions" variant="pills" />
+                  <!-- Tabs -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-4">Onglets (Tabs)</Heading>
+                    <div class="space-y-6">
+                      <div>
+                        <span class="text-xs text-[#65676B] mb-2 block font-medium uppercase tracking-wider">Style
+                          Bordure
+                          (Classic)</span>
+                        <Tabs v-model="tabVal" :options="tabOptions" />
+                      </div>
+                      <div>
+                        <span class="text-xs text-[#65676B] mb-2 block font-medium uppercase tracking-wider">Style
+                          Pilule
+                          (Insights)</span>
+                        <Tabs v-model="tabValPills" :options="tabOptions" variant="pills" />
+                      </div>
                     </div>
                   </div>
+
+                  <!-- Stepper -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-4">Progression (Stepper)</Heading>
+                    <Stepper>
+                      <StepperItem label="Panier" :completed="true" />
+                      <StepperItem label="Paiement" active />
+                      <StepperItem label="Confirmation" />
+                    </Stepper>
+                  </div>
+
+                  <!-- Pagination -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-2">Pagination</Heading>
+                    <Pagination v-model:currentPage="currentPage" :totalPages="5" />
+                  </div>
+                </div>
+              </Card>
+            </section>
+
+            <!-- Section: Buttons -->
+            <section>
+              <Card>
+                <template #header>
+                  <Heading level="3">Variantes de Boutons</Heading>
+                </template>
+
+                <div class="flex flex-wrap gap-4 mb-6">
+                  <Button variant="primary">Primaire</Button>
+                  <Button variant="secondary">Secondaire</Button>
+                  <Button variant="ghost">Fantôme</Button>
+                  <Button variant="danger">Danger</Button>
                 </div>
 
-                <!-- Stepper -->
-                <div>
-                  <h3 class="font-semibold text-sm mb-4 text-[#65676B]">Progression (Stepper)</h3>
-                  <Stepper>
-                    <StepperItem label="Panier" :completed="true" />
-                    <StepperItem label="Paiement" active />
-                    <StepperItem label="Confirmation" />
-                  </Stepper>
+                <div class="flex flex-wrap gap-4 items-center">
+                  <Button variant="primary" size="sm">Petit</Button>
+                  <Button variant="primary" size="md">Normal</Button>
+                  <Button variant="primary" size="lg">Grand</Button>
+                  <Button variant="secondary" :loading="isLoading" @click="triggerLoading">
+                    Test Chargement
+                  </Button>
+                  <Button variant="primary" disabled>Désactivé</Button>
                 </div>
+              </Card>
+            </section>
+          </div>
 
-                <!-- Pagination -->
-                <div>
-                  <h3 class="font-semibold text-sm mb-2 text-[#65676B]">Pagination</h3>
-                  <Pagination v-model:currentPage="currentPage" :totalPages="5" />
+          <div class="space-y-8">
+            <!-- Section: Feedbacks & Notifications -->
+            <section>
+              <Card>
+                <template #header>
+                  <Heading level="3">Feedback (Retours)</Heading>
+                </template>
+
+                <div class="space-y-6">
+                  <!-- Alerts -->
+                  <div class="space-y-3">
+                    <Alert type="info" message="Mise à jour système planifiée ce soir à 2h." />
+                    <Alert type="success" title="Action réussie"
+                      message="Le rapport a été généré et vous a été envoyé par email." dismissible />
+                    <Alert type="error" title="Erreur inattendue" message="La connexion au serveur a été perdue." />
+                  </div>
+
+                  <!-- Notice -->
+                  <div>
+                    <Notice title="Nouveau programme Beta"
+                      message="Découvrez en avant-première nos nouvelles fonctionnalités de statistiques."
+                      actionLabel="Rejoindre" />
+                  </div>
+
+                  <!-- Loaders & Radial Progress -->
+                  <div class="pt-4 border-t border-[#CED0D4]">
+                    <Heading level="5" variant="section" class="mb-4">Indicateurs d'attente</Heading>
+                    <div class="flex items-center gap-6">
+                      <Loader size="lg" color="primary" />
+                      <Loader size="md" color="neutral" />
+                      <CircleProgress :value="75" size="3.5rem">75%</CircleProgress>
+                    </div>
+                  </div>
+
+                  <div class="pt-4">
+                    <Button variant="secondary" @click="triggerSnackbar">Afficher un Snackbar (Toast)</Button>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </section>
+              </Card>
+            </section>
 
-          <!-- Section: Buttons -->
-          <section>
-            <Card>
-              <template #header>
-                <h2 class="text-lg font-bold">Variantes de Boutons</h2>
-              </template>
+            <!-- Section: Data Display -->
+            <section>
+              <Card>
+                <template #header>
+                  <Heading level="3">Affichage de données</Heading>
+                </template>
 
-              <div class="flex flex-wrap gap-4 mb-6">
-                <Button variant="primary">Primaire</Button>
-                <Button variant="secondary">Secondaire</Button>
-                <Button variant="ghost">Fantôme</Button>
-                <Button variant="danger">Danger</Button>
-              </div>
+                <div class="space-y-8">
+                  <!-- ListTile -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-4">Listes (ListTile)</Heading>
+                    <div class="space-y-2">
+                      <ListTile title="John Doe" subtitle="Administrateur système"
+                        avatar="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
+                      <ListTile title="Configuration réseau" subtitle="Dernière modification il y a 2h"
+                        :icon="Briefcase" />
+                    </div>
+                  </div>
 
-              <div class="flex flex-wrap gap-4 items-center">
-                <Button variant="primary" size="sm">Petit</Button>
-                <Button variant="primary" size="md">Normal</Button>
-                <Button variant="primary" size="lg">Grand</Button>
-                <Button variant="secondary" :loading="isLoading" @click="triggerLoading">
-                  Test Chargement
+                  <!-- DataTable Simple -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-4">Tableaux Basiques (DataTable Simple)</Heading>
+                    <DataTable :columns="tableColumnsSimple" :data="tableDataSimple" striped>
+                      <template #cell-status="{ value }">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold"
+                          :class="value === 'Payé' ? 'bg-[#E7F3EB] text-[#2FA14A]' : 'bg-[#FFF5E5] text-[#D88A00]'">
+                          {{ value }}
+                        </span>
+                      </template>
+                    </DataTable>
+                  </div>
+
+                  <!-- DataTable Avancé -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-4 mt-8">Tableaux Avancés (DataTable avec Slots
+                      Visuels)
+                    </Heading>
+                    <DataTable :columns="tableColumns" :data="tableData">
+                      <!-- Slot Utilisateur -->
+                      <template #cell-user="{ row }">
+                        <div class="flex items-center gap-3">
+                          <div class="avatar shrink-0">
+                            <div class="w-10 h-10 rounded-full border border-[#CED0D4]/50 overflow-hidden shadow-sm">
+                              <img :src="row.avatar" alt="Avatar" class="object-cover w-full h-full" />
+                            </div>
+                          </div>
+                          <div>
+                            <div class="font-bold text-[#050505] text-[15px]">{{ row.name }}</div>
+                            <div class="text-[13px] text-[#65676B]">{{ row.email }}</div>
+                          </div>
+                        </div>
+                      </template>
+
+                      <!-- Slot Rôle -->
+                      <template #cell-role="{ value }">
+                        <Text weight="semibold" size="sm">{{ value }}</Text>
+                      </template>
+
+                      <!-- Slot Statut -->
+                      <template #cell-status="{ value }">
+                        <Badge
+                          :variant="value === 'Actif' ? 'success' : value === 'En attente' ? 'warning' : 'neutral'">
+                          {{ value }}
+                        </Badge>
+                      </template>
+
+                      <!-- Slot Dernière connexion -->
+                      <template #cell-lastLogin="{ value }">
+                        <Text variant="secondary" size="sm">{{ value }}</Text>
+                      </template>
+
+                      <!-- Slot Actions -->
+                      <template #cell-actions="{ row }">
+                        <div class="flex justify-end">
+                          <DropdownButton label="Options" variant="ghost" align="end">
+                            <MenuItem>Modifier l'utilisateur</MenuItem>
+                            <MenuItem>Changer le rôle</MenuItem>
+                            <MenuDivider />
+                            <MenuItem class="text-red-600">Désactiver</MenuItem>
+                          </DropdownButton>
+                        </div>
+                      </template>
+                    </DataTable>
+                  </div>
+                </div>
+              </Card>
+            </section>
+
+            <!-- Section: Overlays & Composants Compactés -->
+            <section>
+              <Card>
+                <template #header>
+                  <Heading level="3">Composants Compactés & Menus</Heading>
+                </template>
+
+                <div class="space-y-8">
+                  <!-- Badges -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-4">Badges</Heading>
+                    <div class="flex flex-wrap gap-2">
+                      <Badge variant="primary">Nouveau</Badge>
+                      <Badge variant="success">En ligne</Badge>
+                      <Badge variant="warning">Brouillon</Badge>
+                      <Badge variant="error" outline>Important</Badge>
+                      <Badge variant="secondary">Info</Badge>
+                      <Badge variant="neutral">99+</Badge>
+                    </div>
+                  </div>
+
+                  <!-- Accordion -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-4">Accordéons (Accordion)</Heading>
+                    <div class="space-y-2 max-w-2xl">
+                      <Accordion title="Comment gérer mes notifications ?" name="faq">
+                        Vous pouvez accéder à vos préférences de notifications depuis les paramètres de votre compte et
+                        définir des alertes spécifiques par e-mail ou push.
+                      </Accordion>
+                      <Accordion title="Où puis-je trouver mes factures ?" name="faq" defaultOpen>
+                        Toutes vos factures sont disponibles dans l'onglet "Facturation" situé dans le panneau latéral
+                        gauche. Vous pouvez les télécharger au format PDF.
+                      </Accordion>
+                    </div>
+                  </div>
+
+                  <!-- Dropdowns & Popovers -->
+                  <div>
+                    <Heading level="5" variant="section" class="mb-4">Menus déroulants (Dropdown & Popover)</Heading>
+                    <div class="flex items-center gap-4">
+                      <DropdownButton label="Actions rapides" variant="primary">
+                        <MenuItem href="#">Modifier le profil</MenuItem>
+                        <MenuItem href="#">Paramètres de confidentialité</MenuItem>
+                        <MenuItem href="#" danger>Supprimer</MenuItem>
+                      </DropdownButton>
+
+                      <Popover width="w-72" align="end">
+                        <template #trigger>
+                          <Button variant="secondary">Mon Profil</Button>
+                        </template>
+                        <div class="flex flex-col gap-2">
+                          <div class="flex items-center gap-3 p-2">
+                            <div class="avatar shrink-0">
+                              <div
+                                class="w-10 h-10 rounded-full bg-[#E4E6EB] flex items-center justify-center font-bold text-[#050505]">
+                                JD</div>
+                            </div>
+                            <div>
+                              <Text weight="bold" class="leading-tight">John Doe</Text>
+                              <Text variant="secondary" size="sm">john.doe@example.com</Text>
+                            </div>
+                          </div>
+                          <MenuDivider />
+                          <Menu class="w-full">
+                            <MenuItem href="#">Paramètres</MenuItem>
+                            <MenuItem href="#">Se déconnecter</MenuItem>
+                          </Menu>
+                        </div>
+                      </Popover>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </section>
+
+            <!-- Section: Modal Demo -->
+            <section>
+              <Card>
+                <template #header>
+                  <Heading level="3">Interactions</Heading>
+                </template>
+
+                <p class="fb-text-secondary text-sm mb-4">
+                  Les modales utilisent l'élément HTML dialog nativement stylisé par DaisyUI avec un comportement
+                  mobile-first.
+                </p>
+
+                <Button class="w-full" @click="showModal = true">
+                  Ouvrir la Modale
                 </Button>
-                <Button variant="primary" disabled>Désactivé</Button>
-              </div>
-            </Card>
-          </section>
-        </div>
+              </Card>
+            </section>
+          </div>
+          <!-- End Grid -->
 
-        <div class="space-y-8">
-          <!-- Section: Feedbacks & Notifications -->
-          <section>
-            <Card>
-              <template #header>
-                <h2 class="text-lg font-bold">Feedback (Retours)</h2>
-              </template>
+          <!-- SECTION: Composants Métier (Phase 4) -->
 
-              <div class="space-y-6">
-                <!-- Alerts -->
-                <div class="space-y-3">
-                  <Alert type="info" message="Mise à jour système planifiée ce soir à 2h." />
-                  <Alert type="success" title="Action réussie"
-                    message="Le rapport a été généré et vous a été envoyé par email." dismissible />
-                  <Alert type="error" title="Erreur inattendue" message="La connexion au serveur a été perdue." />
-                </div>
+          <!-- SECTION: Tableau Dynamique -->
+          <Section class="mt-8 pt-8 border-t border-[#CED0D4]">
+            <HeaderWidget title="Tableau de Données"
+              subtitle="DataTable avec slots dynamiques (Avatar, Badges, Actions)" />
+            <div class="mt-6">
+              <DataTable :columns="tableColumns" :data="tableData">
+                <!-- Slot Utilisateur -->
+                <template #cell-user="{ row }">
+                  <div class="flex items-center gap-3">
+                    <div class="avatar shrink-0">
+                      <div class="w-10 h-10 rounded-full border border-[#CED0D4]/50 overflow-hidden shadow-sm">
+                        <img :src="row.avatar" alt="Avatar" class="object-cover w-full h-full" />
+                      </div>
+                    </div>
+                    <div>
+                      <div class="font-bold text-[#050505] text-[15px]">{{ row.name }}</div>
+                      <div class="text-[13px] text-[#65676B]">{{ row.email }}</div>
+                    </div>
+                  </div>
+                </template>
 
-                <!-- Notice -->
-                <div>
-                  <Notice title="Nouveau programme Beta"
-                    message="Découvrez en avant-première nos nouvelles fonctionnalités de statistiques."
-                    actionLabel="Rejoindre" />
-                </div>
+                <!-- Slot Rôle -->
+                <template #cell-role="{ value }">
+                  <Text weight="semibold" size="sm">{{ value }}</Text>
+                </template>
 
-                <!-- Loaders & Radial Progress -->
-                <div class="pt-4 border-t border-[#CED0D4]">
-                  <h3 class="font-semibold text-sm mb-4 text-[#65676B]">Indicateurs d'attente</h3>
-                  <div class="flex items-center gap-6">
-                    <Loader size="lg" color="primary" />
-                    <Loader size="md" color="neutral" />
-                    <CircleProgress :value="75" size="3.5rem">75%</CircleProgress>
+                <!-- Slot Statut -->
+                <template #cell-status="{ value }">
+                  <Badge :variant="value === 'Actif' ? 'success' : value === 'En attente' ? 'warning' : 'neutral'">
+                    {{ value }}
+                  </Badge>
+                </template>
+
+                <!-- Slot Dernière connexion -->
+                <template #cell-lastLogin="{ value }">
+                  <Text variant="secondary" size="sm">{{ value }}</Text>
+                </template>
+
+                <!-- Slot Actions -->
+                <template #cell-actions="{ row }">
+                  <div class="flex justify-end">
+                    <DropdownButton label="Options" variant="ghost" align="end">
+                      <MenuItem>Modifier l'utilisateur</MenuItem>
+                      <MenuItem>Changer le rôle</MenuItem>
+                      <MenuDivider />
+                      <MenuItem class="text-red-600">Désactiver</MenuItem>
+                    </DropdownButton>
+                  </div>
+                </template>
+              </DataTable>
+            </div>
+          </Section>
+
+          <Section class="mt-8 pt-8 border-t border-[#CED0D4]">
+            <HeaderWidget title="Composants Métier & Avancés"
+              subtitle="Phase 4 - Modèles de documents, éditeurs et paiements" />
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-6">
+              <Card class="h-full">
+                <template #header>
+                  <Heading level="4">Prise de rendez-vous & Édition</Heading>
+                </template>
+                <div class="space-y-6">
+                  <div>
+                    <Heading level="6" variant="section" class="mb-4">Créneaux horaires (TimeSlotSelector)</Heading>
+                    <TimeSlotSelector v-model="selectedTime" :slots="timeSlots" />
+                  </div>
+                  <Separator />
+                  <div>
+                    <Heading level="6" variant="section" class="mb-4">Éditeur de texte (Wysiwyg Mock)</Heading>
+                    <Editor v-model="editorContent" placeholder="Tapez votre description ici..."
+                      minHeight="min-h-[150px]" />
+                  </div>
+                  <Separator />
+                  <div>
+                    <Heading level="6" variant="section" class="mb-4">Modales d'actions & Liens</Heading>
+                    <div class="flex flex-wrap gap-3 mb-4">
+                      <Button variant="danger" @click="showConfirm = true">Supprimer</Button>
+                      <Button variant="secondary" @click="showDocPreview = true">Voir PDF</Button>
+                      <Button variant="secondary" @click="showImagePreview = true">Voir Image</Button>
+                    </div>
+                    <div class="flex flex-wrap gap-4 items-center bg-[#F0F2F5] p-4 rounded-lg">
+                      <Link href="#" class="!text-[#65676B]">Retour à la liste</Link>
+                      <Separator vertical class="h-4 hidden sm:block" />
+                      <Link href="#" external>
+                        <template #icon>
+                          <Icon :icon="ThumbsUp" size="sm" />
+                        </template>
+                        Aimer la page
+                      </Link>
+                    </div>
                   </div>
                 </div>
-
-                <div class="pt-4">
-                  <Button variant="secondary" @click="triggerSnackbar">Afficher un Snackbar (Toast)</Button>
-                </div>
-              </div>
-            </Card>
-          </section>
-
-          <!-- Section: Data Display -->
-          <section>
-            <Card>
-              <template #header>
-                <h2 class="text-lg font-bold">Affichage de données</h2>
-              </template>
+              </Card>
 
               <div class="space-y-8">
-                <!-- ListTile -->
-                <div>
-                  <h3 class="font-semibold text-sm mb-4 text-[#65676B]">Listes (ListTile)</h3>
-                  <div class="space-y-2">
-                    <ListTile title="John Doe" subtitle="Administrateur système"
-                      avatar="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
-                    <ListTile title="Configuration réseau" subtitle="Dernière modification il y a 2h"
-                      :icon="Briefcase" />
+                <Card>
+                  <template #header>
+                    <Heading level="4">Transactions & Paiements</Heading>
+                  </template>
+                  <div class="space-y-6">
+                    <div class="flex justify-center sm:justify-start">
+                      <PaymentButton amount="129.99" currency="€" showArrow />
+                    </div>
+                    <Separator />
+                    <SuccessWidget title="Paiement validé !"
+                      message="Votre commande #1234 a été confirmée avec succès.">
+                      <Button variant="secondary" class="flex-1 sm:flex-none">Voir la facture</Button>
+                      <Button variant="primary" class="flex-1 sm:flex-none">Continuer</Button>
+                    </SuccessWidget>
                   </div>
-                </div>
+                </Card>
 
-                <!-- DataTable -->
-                <div>
-                  <h3 class="font-semibold text-sm mb-4 text-[#65676B]">Tableaux (DataTable)</h3>
-                  <DataTable :columns="tableColumns" :data="tableData" striped>
-                    <template #cell-status="{ value }">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold"
-                        :class="value === 'Payé' ? 'bg-[#E7F3EB] text-[#2FA14A]' : 'bg-[#FFF5E5] text-[#D88A00]'">
-                        {{ value }}
-                      </span>
-                    </template>
-                  </DataTable>
-                </div>
+                <InfoCard variant="info" title="Expertise Business"
+                  description="Outils spécialisés pour votre croissance." :icon="Briefcase" />
               </div>
-            </Card>
-          </section>
+            </div>
 
-          <!-- Section: Modal Demo -->
-          <section>
-            <Card>
-              <template #header>
-                <h2 class="text-lg font-bold">Interactions</h2>
-              </template>
-
-              <p class="fb-text-secondary text-sm mb-4">
-                Les modales utilisent l'élément HTML dialog nativement stylisé par DaisyUI avec un comportement
-                mobile-first.
-              </p>
-
-              <Button class="w-full" @click="showModal = true">
-                Ouvrir la Modale
-              </Button>
-            </Card>
-          </section>
+            <div class="mt-8">
+              <Card variant="muted" bodyClass="p-2 sm:p-8">
+                <template #header>
+                  <Heading level="4">Modèle de Facture (InvoiceTemplate)</Heading>
+                </template>
+                <InvoiceTemplate invoiceNumber="INV-2023-001" date="12/10/2023" dueDate="26/10/2023"
+                  customerName="Entreprise cliente ABC" status="paid" :items="[
+                    { description: 'Conception UI/UX', quantity: 1, unitPrice: '800.00 €', amount: '800.00 €' },
+                    { description: 'Développement Frontend', quantity: 1, unitPrice: '1200.00 €', amount: '1200.00 €' }
+                  ]" subtotal="2000.00 €" total="2400.00 €" tax="400.00 €" />
+              </Card>
+            </div>
+          </Section>
         </div>
       </div>
       <!-- Render Snackbar globally inside Layout but floating -->
@@ -441,6 +760,17 @@ const triggerLoading = () => {
         @close="showSnackbar = false" />
     </div>
   </Layout>
+
+
+  <ConfirmDialog v-model="showConfirm" title="Supprimer définitivement ?"
+    message="Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible et toutes les données associées seront perdues."
+    confirmText="Oui, supprimer" />
+
+  <DocumentPreview v-model="showDocPreview" title="Conditions Générales.pdf" fileSize="2.4 MB" type="pdf"
+    url="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" />
+
+  <ImagePreview v-model="showImagePreview" title="Aperçu_Design_V2.png"
+    url="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2000&auto=format&fit=crop" />
 
   <!-- The Modal -->
   <Modal v-model="showModal" title="Créer un rapport">
