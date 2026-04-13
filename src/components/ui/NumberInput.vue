@@ -44,9 +44,9 @@ const onInput = (e: Event) => {
         </label>
         <input :id="localId" type="number" :placeholder="placeholder" :value="modelValue" :min="min" :max="max"
             :step="step" @input="onInput" :disabled="disabled"
-            class="input w-full bg-[#F0F2F5] border border-transparent focus:border-[#0866FF] focus:bg-white focus:outline-none transition-colors text-[#050505] placeholder:text-[#65676B] h-[40px] px-3 rounded-md input-number-clean"
+            class="block w-full bg-[#F0F2F5] border border-transparent focus:bg-white transition-all text-[#050505] placeholder:text-[#8D949E] px-3 rounded-lg h-11 focus:outline-none shadow-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-inner-spin-button]:m-0"
             :class="[
-                error ? 'border-error focus:border-error bg-white' : '',
+                error ? 'border-[#E41E3F] focus:border-[#E41E3F] focus:ring-4 focus:ring-[#E41E3F]/20 bg-white' : 'focus:border-[#0866FF] focus:ring-4 focus:ring-[#0866FF]/20',
                 disabled ? 'opacity-50 cursor-not-allowed' : ''
             ]" />
         <label v-if="error || hint" class="label pt-1 pb-0">

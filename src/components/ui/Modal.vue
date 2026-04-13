@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { X } from 'lucide-vue-next'
 
 interface Props {
     modelValue: boolean
@@ -40,11 +41,8 @@ const close = () => {
                     <slot name="title" v-if="!title" />
                 </h3>
                 <button @click="close"
-                    class="absolute left-4 top-1/2 -translate-y-1/2 w-[36px] h-[36px] rounded-full bg-[#E4E6EB] hover:bg-[#D8DADF] flex items-center justify-center transition-colors">
-                    <svg class="w-5 h-5 text-[#050505]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
+                    class="absolute right-4 top-1/2 -translate-y-1/2 w-[36px] h-[36px] rounded-full bg-[#E4E6EB] hover:bg-[#D8DADF] flex items-center justify-center transition-colors text-[#65676B]">
+                    <X class="w-5 h-5" stroke-width="2.5" />
                 </button>
             </div>
 

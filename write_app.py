@@ -1,4 +1,6 @@
-<script setup lang="ts">
+import codecs
+
+app_content = """<script setup lang="ts">
 import { ref } from 'vue'
 import AvatarDoc from './docs/AvatarDoc.vue'
 import ButtonDoc from './docs/ButtonDoc.vue'
@@ -81,7 +83,7 @@ const goTo = (state: 'main' | 'stats') => {
             <div class="divider my-1"></div>
             
             <SidebarItem title="Formulaires" :icon="FileText" :active="activeDoc === 'inputs'" @click="activeDoc = 'inputs'" />
-            
+            <SidebarItem title="OTP Input" :icon="Lock" :active="activeDoc === 'otp'" @click="activeDoc = 'otp'" />
             <SidebarItem title="Navigation" :icon="Home" :active="activeDoc === 'nav'" @click="activeDoc = 'nav'" />
             <SidebarItem title="Contrôles" :icon="Settings" :active="activeDoc === 'controls'" @click="activeDoc = 'controls'" />
             
@@ -143,3 +145,7 @@ const goTo = (state: 'main' | 'stats') => {
     </div>
   </Layout>
 </template>
+"""
+
+with codecs.open(r'c:\Users\aron\hologram\backup\imauzo\apps\imauzo-ui\src\App.vue', 'w', 'utf-8') as f:
+    f.write(app_content)

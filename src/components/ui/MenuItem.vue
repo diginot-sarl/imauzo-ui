@@ -16,7 +16,7 @@ defineEmits(['click'])
 <template>
     <li :class="cn({ 'disabled': disabled }, props.class)">
         <a :href="href" :class="cn(
-            'font-medium transition-colors',
+            'font-medium transition-colors rounded-md',
             active ? 'active' : '',
             danger ? 'text-[#E02636] hover:bg-[#E02636]/10 hover:text-[#E02636]' : ''
         )" @click="!disabled && $emit('click', $event)">

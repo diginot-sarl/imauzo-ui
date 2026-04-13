@@ -65,18 +65,24 @@ useClickOutside(floating, closeMenu, reference)
 </script>
 
 <template>
-    <div>
-        <button ref="reference" type="button" @click="toggleMenu"
-            class="btn btn-sm h-10 px-4 rounded-md tracking-wide text-[14px] font-semibold border-none shadow-none flex flex-nowrap items-center gap-1.5 transition-colors"
-            :class="{
-                'bg-[#0866FF] text-white hover:bg-[#075ce5]': variant === 'primary',
-                'bg-[#E4E6EB] text-[#050505] hover:bg-[#D8DADF]': variant === 'secondary',
-                'bg-transparent text-[#050505] hover:bg-[#F0F2F5]': variant === 'ghost',
-                'ring-2 ring-[#0866FF] ring-opacity-50': isOpen && variant !== 'ghost'
-            }">
-            <slot name="label">{{ label }}</slot>
-            <ChevronDown class="w-4 h-4 opacity-70 transition-transform" :class="isOpen ? 'rotate-180' : ''" />
-        </button>
+    <!-- Container w-fit essentiel pour que le menu hérite de la vraie largeur du trigger -->
+    <div ref="reference" class="inline-block relative w-fit" @click="toggleMenu">
+        
+        <!-- Slot personnalisé permettant d'injecter un Avatar, IconButton, etc. -->
+        <slot name="trigger" :isOpen="isOpen">
+            <!-- Bouton par défaut si aucun trigger personnalisé n'est fourni -->
+            <button type="button"
+                class="btn btn-sm h-10 px-4 rounded-md tracking-wide text-[14px] font-semibold border-none shadow-none flex flex-nowrap items-center gap-1.5 transition-colors"
+                :class="{
+                    'bg-[#0866FF] text-white hover:bg-[#075ce5]': variant === 'primary',
+                    'bg-[#E4E6EB] text-[#050505] hover:bg-[#D8DADF]': variant === 'secondary',
+                    'bg-transparent text-[#050505] hover:bg-[#F0F2F5]': variant === 'ghost',
+                    'ring-2 ring-[#0866FF] ring-opacity-50': isOpen && variant !== 'ghost'
+                }">
+                <slot name="label">{{ label }}</slot>
+                <ChevronDown class="w-4 h-4 opacity-70 transition-transform" :class="isOpen ? 'rotate-180' : ''" />
+            </button>
+        </slot>
 
         <Teleport to="body">
             <Transition enter-active-class="transition duration-200 ease-out origin-top"

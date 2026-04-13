@@ -34,17 +34,18 @@ const clearSearch = () => {
 </script>
 
 <template>
-    <div class="relative w-full">
-        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-[#65676B]">
-            <Search class="w-4 h-4" />
+    <div class="relative flex items-center w-full">
+        <div class="absolute left-3 text-[#65676B] pointer-events-none z-10 flex items-center justify-center">
+            <Search class="w-[18px] h-[18px]" />
         </div>
+        
         <input type="text" :placeholder="placeholder" :value="modelValue" @input="onInput" :disabled="disabled"
-            class="input w-full bg-[#F0F2F5] border border-transparent focus:border-[#0866FF] focus:bg-white focus:outline-none transition-colors text-[#050505] placeholder:text-[#65676B] h-[40px] pl-10 pr-10 rounded-full"
-            :class="{ 'opacity-50 cursor-not-allowed': disabled }" />
+            class="block appearance-none w-full bg-[#F0F2F5] border border-transparent focus:bg-white transition-all text-[15px] pl-10 pr-10 rounded-full h-10 focus:outline-none focus:border-[#0866FF] focus:ring-4 focus:ring-[#0866FF]/20 shadow-none"
+            :class="{ 'opacity-50 cursor-not-allowed select-none': disabled }" />
+            
         <button v-show="modelValue" type="button" @click="clearSearch"
-            class="absolute inset-y-0 right-0 flex items-center pr-3 group">
-            <div
-                class="w-4 h-4 rounded-full bg-[#CED0D4] group-hover:bg-[#65676B] flex items-center justify-center transition-colors">
+            class="absolute right-3 flex items-center justify-center group z-10">
+            <div class="w-[18px] h-[18px] rounded-full bg-[#CED0D4] group-hover:bg-[#8D949E] flex items-center justify-center transition-colors">
                 <X class="w-3 h-3 text-white" />
             </div>
         </button>
