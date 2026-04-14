@@ -1,3 +1,4 @@
+import './style.css'
 export { default as Accordion } from './components/ui/Accordion.vue'
 export { default as Alert } from './components/ui/Alert.vue'
 export { default as Avatar } from './components/ui/Avatar.vue'
