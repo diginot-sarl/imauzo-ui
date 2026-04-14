@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     vue(), 
     tailwindcss(),
-    dts({ tsconfigPath: './tsconfig.app.json', rollupTypes: true })
+    dts({ tsconfigPath: './tsconfig.app.json', cleanVueFileName: true })
   ],
   resolve: {
     alias: {
