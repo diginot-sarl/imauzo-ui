@@ -1,9 +1,12 @@
 @import "tailwindcss";
-@source "./**/*.vue";
 @plugin "daisyui";
 
+/* ------------------------------------------------------------- 
+ *  THEME TAILWIND V4 - DESIGN SYSTEM "META"
+ * ------------------------------------------------------------- */
 @theme {
-  --color-primary: #0866ff;
+  /* Couleurs Fondamentales */
+  --color-primary: #0866FF;
   --color-primary-hover: #075ce5;
   --color-primary-active: #0650c9;
   
@@ -11,16 +14,16 @@
   --color-secondary-hover: #D8DADF;
   --color-secondary-active: #CCD0D5;
   
-  --color-danger: #E41E3F;
+  --color-danger: #e41e3f;
   --color-danger-hover: #C91A39;
   --color-danger-active: #B01732;
   
-  --color-success: #2FA14A;
+  --color-success: #31A24C;
   --color-success-hover: #288C40;
   --color-success-active: #207033;
   
-  --color-warning: #D88A00;
-  --color-warning-hover: #c47c00;
+  --color-warning: hsl(40, 89%, 52%);
+  --color-warning-hover: hsl(40, 89%, 45%);
   
   --color-base-border: #CED0D4;
   --color-base-border-hover: #8D949E;
@@ -32,55 +35,246 @@
   --color-ghost-active: #E4E6EB;
 
   --color-primary-content: #ffffff;
-  --color-base-100: #ffffff;
-  --color-base-200: #f0f2f5; /* Fond principal FB */
-  --color-base-300: #e4e6eb; /* Boutons secondaires / Hover FB */
+  --color-base-100: #FFFFFF;
+  --color-base-200: #F0F2F5; /* web-wash / main background */
+  --color-base-300: #E4E6EB; /* secondary / wash */
   --color-base-content: #050505;
 
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  /* Géométrie rigoureuse Facebook */
+  --radius-sm: 4px;
+  --radius-md: 6px;  /* button-corner-radius */
+  --radius-lg: 8px;  /* card-corner-radius */
+  --radius-xl: 12px;
 
+  /* Ombres Facebook (Elevation) */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
-  --shadow-md:
-    0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1); /* Ombre de modal FB */
+  --shadow-md: 0 2px 4px 0 rgba(0, 0, 0, 0.1); 
+  --shadow-lg: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1); /* card-box-shadow elevated */
 }
 
+/* ------------------------------------------------------------- 
+ *  INJECTION DU ROOT GLOBAL FACEBOOK
+ * ------------------------------------------------------------- */
 @layer base {
   body {
     @apply bg-base-200 text-base-content font-sans antialiased text-[15px];
+  }
+
+  :root, .__fb-light-mode:root, .__fb-light-mode {
+    /* Forçage absolu sur DaisyUI (V4 & V5 Fallbacks) */
+    --color-primary: #0866FF;
+    --color-secondary: #E4E6EB;
+    --color-success: #31A24C;
+    --color-warning: hsl(40, 89%, 52%);
+    --color-danger: #e41e3f;
+    --color-error: #e41e3f;
+    --color-primary-content: #ffffff;
+    
+    --p: #0866FF;
+    --pc: #ffffff;
+    --s: #E4E6EB;
+    --su: #31A24C;
+    --wa: hsl(40, 89%, 52%);
+    --er: #e41e3f;
+    --in: #0866FF;
+    
+    --action-corner-radius: 6px;
+    --action-tile-radius: 16px;
+    --attachment-footer-background: #F8F9FB;
+    --background-deemphasized: #F2F4F7;
+    --badge-corner-radius: 255px;
+    --base-cherry: #FB3C44;
+    --base-grape: #7D74FF;
+    --base-lemon: #F9CF00;
+    --base-lime: #3FBB46;
+    --base-pink: #FA61BA;
+    --base-teal: #14B898;
+    --blue-link: #0064D1;
+    --border-ui-emphasis: #E2E5E9;
+    --bottom-sheet-corner-radius: 20px;
+    --button-corner-radius: 6px;
+    --button-group-corner-radius: 0px;
+    --button-large-corner-radius: 8px;
+    --button-small-corner-radius: 8px;
+    --button-corner-radius-medium: 10px;
+    --button-corner-radius-large: 12px;
+    --card-background: #FFFFFF;
+    --card-background-flat: #F8F9FB;
+    --card-corner-radius: 8px;
+    --card-large-corner-radius: 16px;
+    --card-small-corner-radius: 12px;
+    --card-square-corner-radius: 0px;
+    --carousel-corner-radius: 0px;
+    --cell-corner-radius: 0px;
+    --checkbox-corner-radius: 4px;
+    --chip-corner-radius: 6px;
+    --comment-background: #F0F2F5;
+    --comment-bubble: 16px;
+    --cursor: #0866FF;
+    --cursor-on-color: #FFFFFF;
+    --cursor-on-media: #FFFFFF;
+    --dialog-corner-radius: 12px;
+    --disabled-button-background: #E2E5E9;
+    --disabled-button-text: #BCC0C4;
+    --disabled-icon: #B0B3B8;
+    --disabled-text: #B0B3B8;
+    --divider: #D0D3D7;
+    --divider-on-color: #5C5E62;
+    --event-date: #DD2334;
+    --fb-logo: #0866FF;
+    --fb-wordmark: #0866FF;
+    --filter-group-corner-radius: 0px;
+    --handle-corner-radius: 255px;
+    --hosted-view-selected-state: #EBF5FF;
+    --infochip-large-radius: 8px;
+    --infochip-medium-radius: 4px;
+    --infochip-small-radius: 4px;
+    --input-bar-corner-radius: 255px;
+    --input-border-width: 1px;
+    --input-corner-radius: 6px;
+    --input-field-expanded-corner-radius: 20px;
+    --input-field-round-corner-radius: 255px;
+    --list-cell-corner-radius: 8px;
+    --list-cell-min-height: 44px;
+    --listcell-inset-radius: 16px;
+    --media-corner-radius: 12px;
+    --media-large-corner-radius: 16px;
+    --media-small-corner-radius: 12px;
+    --nav-bar-background: #FFFFFF;
+    --negative: #DD2334;
+    --negative-background: #FFE3DE;
+    --new-notification-background: #E7F3FF;
+    --notification-badge: #e41e3f;
+    --pagination-dots-corner-radius: 255px;
+    --placeholder-icon: #65686C;
+    --placeholder-image: #979A9F;
+    --placeholder-text: #65686C;
+    --popover-background: #FFFFFF;
+    --popover-corner-radius: 16px;
+    --popover-border-color: transparent;
+    --positive: #24832C;
+    --positive-deemphasized: #F2FCF0;
+    --positive-background: #DEEFE1;
+    --primary-button-background: #0866FF;
+    --primary-button-background-on-color: #FFFFFF;
+    --primary-button-background-on-media: #FFFFFF;
+    --primary-button-icon: #FFFFFF;
+    --primary-button-icon-on-color: #000000;
+    --primary-button-icon-on-media: #080809;
+    --primary-button-text: #FFFFFF;
+    --primary-button-text-on-media: #080809;
+    --primary-deemphasized-button-background: #EBF5FF;
+    --primary-deemphasized-button-icon: #0064D1;
+    --primary-deemphasized-button-text: #0064D1;
+    --primary-icon: #050505;
+    --primary-icon-on-media: #FFFFFF;
+    --primary-text: #050505;
+    --primary-text-on-color: #FFFFFF;
+    --primary-text-on-media: #FFFFFF;
+    --profile-photo-actor-corner-radius: 255px;
+    --progress-ring-blue-background: rgba(8, 102, 255, .2);
+    --progress-ring-blue-foreground: #0866FF;
+    --progress-ring-disabled-background: rgba(176, 179, 184, .2);
+    --progress-ring-disabled-foreground: #B0B3B8;
+    --progress-ring-neutral-background: rgba(0, 0, 0, .2);
+    --progress-ring-neutral-foreground: #000000;
+    --progress-ring-on-media-background: rgba(255, 255, 255, .2);
+    --progress-ring-on-media-foreground: #FFFFFF;
+    --radio-border-width: 2px;
+    --radio-checked-icon-size-large: 12px;
+    --radio-checked-icon-size-medium: 12px;
+    --radio-size-large: 24px;
+    --radio-size-medium: 20px;
+    --rating-star-active: #E0761A;
+    --reaction-anger: #DD2334;
+    --reaction-haha: #887000;
+    --reaction-like: #0866FF;
+    --reaction-love: #DD2334;
+    --reaction-sorry: #887000;
+    --reaction-support: #887000;
+    --reaction-wow: #887000;
+    --secondary-button-background: #E2E5E9;
+    --secondary-button-background-floating: #FFFFFF;
+    --secondary-button-text: #050505;
+    --secondary-icon: #65676B;
+    --secondary-text: #65676B;
+    --selection-control-corner-radius: 4px;
+    --selection-control-large-corner-radius: 255px;
+    --surface-background: #FFFFFF;
+    --switch-unchecked-background-color: #8F9297;
+    --text-badge-corner-radius: 4px;
+    --text-badge-padding-horizontal: 6px;
+    --text-badge-padding-vertical: 6px;
+    --text-highlight: rgba(8, 102, 255, .2);
+    --text-input-active-text: #0064D1;
+    --text-input-bar-background: #F0F2F5;
+    --text-input-padding-vertical: 12px;
+    --toast-background: #FFFFFF;
+    --toast-text: #1C2B33;
+    --toast-text-link: #216FDB;
+    --toast-corner-radius: 8px;
+    --toggle-active-background: #EBF5FF;
+    --toggle-active-icon: #0064D1;
+    --toggle-active-text: #0064D1;
+    --tooltip-background: rgba(255, 255, 255, .8);
+    --tooltip-corner-radius: 12px;
+    --warning: hsl(40, 89%, 52%);
+    --wash: #C9CCD1;
+    --web-wash: #F2F4F7;
+    
+    /* Core FDS Colors */
+    --fds-blue-05: #ECF3FF;
+    --fds-blue-30: #AAC9FF;
+    --fds-blue-40: #77A7FF;
+    --fds-blue-60: #1877F2;
+    --fds-gray-00: #F5F6F7;
+    --fds-gray-05: #F2F3F5;
+    --fds-gray-10: #EBEDF0;
+    --fds-gray-20: #DADDE1;
+    --fds-gray-25: #CCD0D5;
+    --fds-gray-30: #BEC3C9;
+    --fds-gray-70: #606770;
+    --fds-gray-80: #444950;
+    --fds-green-55: #00A400;
+    --fds-green-60: #31A73B;
+    --fds-green-65: #51CE70;
+    --fds-red-55: #FA383E;
+    
+    /* Core Shadows */
+    --shadow-1: rgba(0, 0, 0, .1);
+    --shadow-2: rgba(0, 0, 0, .2);
+    --shadow-5: rgba(0, 0, 0, .5);
+    --shadow-base: 0 1px 2px var(--shadow-2);
+    --shadow-elevated: 0 8px 20px 0 rgba(0, 0, 0, .2), 0 2px 4px 0 rgba(0, 0, 0, .1);
+    --card-box-shadow: 0 12px 28px 0 var(--shadow-2), 0 2px 4px 0 var(--shadow-1);
+    
+    /* Core UI Elements */
+    --input-background: #FFFFFF;
+    --input-background-disabled: #F0F2F5;
+    --input-border-color-hover: var(--placeholder-text);
   }
 }
 
 /* Custom Facebook-like classes */
 .fb-card {
-  @apply bg-base-100 rounded-lg border border-[#CED0D4] shadow-none;
+  @apply bg-base-100 rounded-lg border border-[var(--color-base-border)] shadow-md;
 }
 
 .fb-text-secondary {
-  @apply text-[#65676B];
-}
-/* SLIDE ALLER (vers la gauche) */
-.slide-left-enter-active,
-.slide-left-leave-active {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.slide-left-enter-from {
-  transform: translateX(100%);
-}
-.slide-left-leave-to {
-  transform: translateX(-100%);
+  @apply text-text-secondary;
 }
 
-/* SLIDE RETOUR (vers la droite) */
+/* SLIDE TRANSITIONS */
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: transform 0.35s cubic-bezier(0.14, 1, 0.34, 1);
+}
+.slide-left-enter-from { transform: translateX(100%); }
+.slide-left-leave-to { transform: translateX(-100%); }
+
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.25s cubic-bezier(0.14, 1, 0.34, 1);
 }
-.slide-right-enter-from {
-  transform: translateX(-100%);
-}
-.slide-right-leave-to {
-  transform: translateX(100%);
-}
+.slide-right-enter-from { transform: translateX(-100%); }
+.slide-right-leave-to { transform: translateX(100%); }
