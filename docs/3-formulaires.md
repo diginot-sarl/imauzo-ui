@@ -1,85 +1,79 @@
 # 📝 3. Formulaires et Entrées
 
-iMauzo UI garantit une saisie textuelle premium avec la gestion standardisée des labels, astuces (*hints*), et statuts d'erreur stricts avec Feedback visuel immédiat (Ring rouge).
+L'univers des Inputs iMauzo inclut tout le panel allant de la saisie numérique simple au document hybride uploader.
 
 ---
 
-## `<TextInput>` & `<Textarea>`
-Dédié aux saisies natives avec l'allure minimaliste Facebook. Le focus applique un trait bleu roi (`--color-primary`), et l'erreur bascule toutes les couleurs en `--color-danger`.
+## Inputs Standards : `<TextInput>`, `<NumberInput>`, `<Textarea>`
+Dédiés aux saisies natives avec l'allure minimaliste Facebook. Le focus applique un trait bleu roi (`--color-primary`), et l'erreur bascule toutes les couleurs en `--color-danger`.
 
-### Props
-| Nom | Type | Description |
-|:---|:---|:---|
-| `modelValue` | `String` | Utilisable avec `v-model`. |
-| `label` | `String` | Libellé au dessus du champ, en gras. |
-| `hint` | `String` | Mention en gris italic sous le label. |
-| `isValid`| `Boolean`| Vaut `true` par défaut. Si passé à `false`, force un rendu critique rouge. |
-| `errorMessage` | `String` | Message rouge affiché sous l'Input si `isValid` est `false`. |
-| `disabled` | `Boolean` | Rend la saisie opaque et réfractaire aux clics. |
-
-### Exemple
 ```vue
-<TextInput 
-   v-model="email" 
-   label="Adresse E-mail" 
-   placeholder="ex: john@doe.com"
-   :isValid="emailValide"
-   errorMessage="Cet email est déjà pris." 
-/>
+<TextInput v-model="email" label="Adresse E-mail" />
+<NumberInput v-model="age" label="Âge" :min="18" />
+<Textarea v-model="bio" label="Description" :rows="4" />
 ```
 
-*(Idem pour le `<Textarea>` avec la prop `rows` pour déterminer la taille de base).*
+---
+
+## Sélecteurs Classiques et Avancés
+La librairie prend nativement en charge des sélecteurs robustes, incluant le support de la recherche.
+
+- **`<Select>`** : Liste déroulante native.
+- **`<MegaSelect>`** : Choix unique avec Champ de Recherche et rendu UI Dropdown personnalisé.
+- **`<MultiSelect>`** : Choix multiples générant automatiquement des `<Badge>` dans la barre de saisie.
+- **`<TextTagInput>`** : Permet de taper "Entrée" pour former des mots-clés interactifs dans l'input (comme les tags Github).
+
+```vue
+<MegaSelect v-model="user" :options="usersList" optionLabel="nom" optionValue="id" />
+<TextTagInput v-model="motsCles" label="Tags associés" />
+```
+
+---
+
+## Uploadeurs & Documents
+Composants spécialisés dans l'ingestion de fichiers avec aperçu généré localement (Miniature d'image ou signalétique PDF).
+
+- **`<UploadInput>`** : Permet d'importer un fichier d'image ou de document (Visuel Drag&Drop).
+- **`<MultiUploadInput>`** : Import massif de fichiers multiples.
+- **`<DocumentInput>`** : Optimisé spécifiquement pour le scan de pièces d'identités ou de KYC, embarquant un format visuel en "Slot Card".
+
+```vue
+<UploadInput v-model="file" label="Envoyer la facture (.pdf)" accept=".pdf" />
+```
 
 ---
 
 ## `<OTPInput>`
 Composant Premium Meta-style pour renseigner un code d'authentification à N cases textuelles.
+```vue
+<OTPInput :length="6" @complete="(val) => verify(val)" />
+```
 
-### Fonctionnalités :
-- 6 cases indépendantes, centrées avec typographie Large.
-- Auto-focus séquentiel : passe de la case 1 à 2, etc. de manière invisible.
-- Gestion du Retour-Arrière (`Backspace`) sur les cases.
-- Émission d'un évenement `@complete="code"` à la complétion.
+---
+
+## `<SearchInput>`
+Input natif possédant une loupe intégrée et programmé pour les filtres rapides de l'application. Ne requiert pas de manipulation des slots, la loupe fait partie du design interne.
+```vue
+<SearchInput v-model="query" placeholder="Chercher un projet..." />
+```
+
+---
+
+## Composants Booleans : `<Checkbox>`, `<Radio>`, `<Switch>`
+Le visuel interne s'inspire du framework iOS / Meta :
+- Le `Switch` affiche un ovale glissant qui révèle la teinte `--color-primary`.
+- La `Checkbox` propose la coche animée et une bordure de `base-border`.
+- Le `Radio` un cercle sélectionné classique pour les choix uniques.
 
 ```vue
-<OTPInput :length="6" @complete="(val) => alert('Code validé: ' + val)" />
+<Switch v-model="enableBeta" label="Activer la Beta" />
+<Checkbox v-model="terms" label="J'accepte les règles FB" />
 ```
 
 ---
 
 ## `<Range>`
 Variante de `<input type="range">`. Stylisé avec la couleur Primaire Facebook, piste de repérage et poignée de modification.
-
 ```vue
-<div class="w-64">
-    <Text variant="secondary">Volume : {{ userVolume }}%</Text>
-    <Range v-model="userVolume" :min="0" :max="100" />
-</div>
-```
-
----
-
-## `<MegaSelect>` et Sélecteurs Avancés
-L'UI dispose de sélecteurs massifs (`MegaSelect`) intégrant un filtre de recherche, et de sélecteurs Multiples (`MultiSelect`) ou par Tag textuel (`TextTagInput`). 
-Gérez un modèle V-Model complexe :
-
-```vue
-<MegaSelect 
-   v-model="selectedProject" 
-   :options="projectList" 
-   optionLabel="name" 
-   optionValue="id" 
-/>
-```
-
----
-
-## `<Checkbox>`, `<Radio>`, `<Switch>`
-Ces trois composants sont tous supportés. Le visuel interne s'inspire du framework iOS / Meta :
-- Le `Switch` (Toggle) affiche un ovale gris clair qui glisse et révèle une teinte `--color-primary` à l'activation.
-- La `Checkbox` propose la coche animée et une bordure de `base-border`.
-
-```vue
-<Switch v-model="enableBeta" label="Activer la Beta" />
-<Checkbox v-model="terms" label="J'accepte les règles FB" />
+<Range v-model="userVolume" :min="0" :max="100" />
 ```

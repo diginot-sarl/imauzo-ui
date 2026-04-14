@@ -95,3 +95,12 @@ Bouton pré-stylisé hyper discret (Gris `F0F2F5`, Hover ombragé) pour impléme
 ```vue
 <BackButton @click="router.back()" />
 ```
+
+---
+
+## `<PaymentButton>` (Action Spécifique)
+Composant d'action métier prêt à l'emploi avec iconographie intégrée. Prévu pour se démarquer visuellement au moment des checkout ou validations d'engagements financiers. Il embarque par défaut un état de sécurité symbolique.
+
+```vue
+<PaymentButton :amount="150" currency="EUR" @click="process" />
+```

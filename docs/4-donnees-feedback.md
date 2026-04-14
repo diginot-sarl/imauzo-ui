@@ -1,100 +1,86 @@
 # 🛡️ 4. Données, Surfaces & Feedback
 
-Cette ultime section traite de tous les éléments qui permettent de communiquer visuellement avec l'utilisateur ou d'afficher des données complexes (Surfaces). Dans l'empreinte Meta, le feedback est souvent géré par des overlays sombres ou des encarts aux bordures arrondies doucement (`8px` pour le radius général).
+Cette ultime section traite de tous les éléments communicants : containers (`Cards`), affichage massif (`DataTables`), typographie pure (`Text`), et les fenêtres bloquantes (`Modals`).
 
 ---
 
-## `<Avatar>`
-Un micro-composant affichant l'image de profil de l'utilisateur. Si l'image fait défaut, un Fallback utilisant le texte `initial` remplit l'espace avec un aspect gris perle.
-
-### Props principales
-| Nom | Typage | Description |
-|:---|:---|:---|
-| `src` | `String` | URL de l'image de l'utilisateur |
-| `initial`| `String` | Composé des initales (ex: `JD`). Limité à 2 caractères. |
-| `size` | `String` | Tailles `xs` à `xl`. Influe sur le font-size des initiales. |
-| `shape` | `String` | `circle` (255px, par defaut), `square` (6px) |
-| `ring` | `Boolean` | Encercle l'avatar d'une aura primaire en hover. |
-
-**Exemple :** `<Avatar initial="AB" size="md" />`
-
----
-
-## `<Badge>`
-Puce signalétique. Conforme à la colorimétrie absolue Meta.
-
+## Textes et Typographie (`<Heading>`, `<Text>`, `<Section>`)
+Composants génériques pour unifier l'enchainement de lecture sans polluer Tailwind de variables "font-size".
 ```vue
-<!-- Affiche un conteneur vert pâle text-écrit émeraude -->
-<Badge variant="success">Publié</Badge>
+<Heading level="h2">Bienvenue sur le Dashboard</Heading>
+<Text variant="secondary">Ceci est un texte de description standardisé.</Text>
 
-<Badge variant="danger" outline>Attention requise</Badge>
-<Badge variant="secondary">Brouillon</Badge>
+<!-- Layout sémantique (Définit les paddings verticaux du document) -->
+<Section>
+  Contenu textuel a-typique.
+</Section>
 ```
 
 ---
 
-## `<DropdownButton>` & Menus
-Les Dropdowns d'iMauzo utilisent une technologie de positionnement par "Teleport" afin de ne pas être coupés ou z-indexés par les ascendants (pratique dans un DataTable). L'ouverture dévoile un menu à rayon `6px` et l'ombre `shadow-lg` officielle Facebook.
+## Les Containers : `<Card>`, `<InfoCard>`, `<StatsCard>`
+Le socle absolu du `base-100` Facebook (rayon `8px` et `<Section>` de slotage).
+- `<Card>` : Carte neutre vierge avec Titre et Actions en haut à droite.
+- `<InfoCard>` : Variante bleutée ou rouge appelant l'attention sur du texte descriptif.
+- `<StatsCard>` : Affiche directement un Compteur chiffré, un label, et une flèche de tendance de croissance.
 
 ```vue
-<DropdownButton variant="outline" size="sm" class="ml-auto">
-   <template #icon>Filtres <ChevronDown /></template>
-   
-   <!-- Contenu du menu téléporté -->
-   <ul class="p-2 space-y-1">
-      <li class="fb-card hover:bg-base-200 cursor-pointer p-2 text-sm rounded">Filtres Récents</li>
-   </ul>
-</DropdownButton>
+<StatsCard title="Revenus" value="12 400 €" trend="+5.2%" positive />
 ```
+
+---
+
+## L'Organisation : `<Accordion>` et `<ListTile>`
+Gérez le dévoilement progressif.
+- `<Accordion>` : Encapsulateur sémantique gérant le "Click-to-Reveal".
+- `<ListTile>` : Permet de formaliser une ligne parfaite (`leading`, `title`, `subtitle`, `trailing`) extrêmement utilisée dans la modélisation de listes.
+
+```vue
+<ListTile title="Serveur Alpha" subtitle="192.168.1.1">
+  <template #leading><Icon name="server" /></template>
+  <template #trailing><Badge variant="success">En ligne</Badge></template>
+</ListTile>
+```
+
+---
+
+## Média et Icônes : `<Avatar>`, `<Icon>`, `<DocumentPreview>`, `<Editor>`
+- `<Avatar>` : Gère le `shape` (circle, square) et le `ring` Facebook et les fallbacks initiales.
+- `<Icon>` : Wrapper global propulsé par les icônes vectorielles.
+- `<DocumentPreview>` / `<ImagePreview>` : Modal et visionneuse zoomée pour les documents lus.
+- `<Editor>` : Outil de traitement de texte pur injecté.
+
+---
+
+## Interfaces Bloquantes & Dropdowns
+- **`<DropdownButton>` / `<Popover>`** : Dropdowns via "Teleport". Ombres `shadow-lg` Meta.
+- **`<Menu>`, `<MenuItem>`, `<MenuDivider>`** : La structure interne standard d'un Dropdown ou d'une Sidebar customisée pour isoler ses listes.
+- **`<Modal>`** : Boite de dialogue vide native (avec backdrop gris oscuro), fermable par `Echap`.
+- **`<ConfirmDialog>`** : Instance de `Modal` orientée texte/action précise (Oui/Non).
+
+---
+
+## Le Feedback Visuel Continu
+Aidez l'utilisateur à comprendre l'état de son action.
+
+- **Badges** `<Badge>` : Puce signalétique d'état (fond opalescent 20%).
+- **Alertes** `<Alert>` / `<Notice>` : Bannière de message global sur la page (warning/danger).
+- **Snackbar** `<Snackbar>` / `<Toast>` : Discrets notifications de temporisation en bas de page.
+- **Loaders** `<Loader>` / `<CircleProgress>` : Spinners Meta authentiques isolés statiquement.
+- **Success** `<SuccessWidget>` : Affichage final d'accomplissement avec énorme coche verte centrée.
 
 ---
 
 ## `<DataTable>`
-Structure tabulaire massive permettant l'affichage de collections. Les en-têtes sont fixes. Les trames alternent légèrement de couleur.
-
-### Déclaration Type
-Passez la liste de vos clés avec `headers`, et le set de données dans `data`.
+Structure tabulaire massive permettant l'affichage de collections. Lignes alternées.
 ```vue
-<script setup>
-const lesClients = [{ id: 1, nom: 'Meta', status: 'Actif' }]
-const enTetes = [
-   { key: 'nom', label: 'Nom' },
-   { key: 'status', label: 'État' }
-]
-</script>
-
-<template>
-  <DataTable :headers="enTetes" :data="lesClients">
-     <!-- Surcharge d'une cellule manuelle (si on veut ajouter un composant Badge) -->
-     <template #status="{ item }">
-        <Badge variant="success">{{ item.status }}</Badge>
-     </template>
-  </DataTable>
-</template>
+<DataTable :headers="enTetes" :data="lesClients">
+   <!-- Surcharge d'une cellule -->
+   <template #status="{ item }">
+      <Badge variant="success">{{ item.status }}</Badge>
+   </template>
+</DataTable>
 ```
 
 ---
-
-## `<Toast>` et Notifications
-L'affichage `Toast` se greffe généralement dans une couche mère (`Layout`). Elle apparaît brièvement dans le coin. Chez Meta, ces Toasts sont de couleur d'inverse (Noir ou F0F2F5 contrasté). 
-(Fourni actuellement comme API visuelle de base en attendant le script de Toast Global).
-
----
-
-## `<ConfirmDialog>` (Modale Méta)
-Affiche une Surface bloquante avec Overlay foncé à 40%. Ce composant s'ouvre depuis le centre avec une légère transition d'agrandissement (`scale-95` to `scale-100`).
-
-```vue
-<ConfirmDialog 
-   :isOpen="isOpen" 
-   title="Déconnexion" 
-   content="Êtes-vous sûr de vouloir de vous déconnecter ?"
-   confirmText="Se déconnecter"
-   confirmVariant="danger"
-   @confirm="processLogout"
-   @cancel="isOpen = false"
-/>
-```
-
----
-*Vous voilà formellement maitre de la librairie **iMauzo UI**. Chaque atome de ces composants a été conçu pour se marier en une synergie parfaite. Intégrez, et appréciez.*
+*Fin du document technique V1.0.0. iMauzo UI respecte le standard `Conventional Commits` et suit un versionnage sémantique rigoureux.*
