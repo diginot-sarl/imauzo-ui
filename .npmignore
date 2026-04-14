@@ -1,0 +1,8 @@
+src/
+public/
+docs/
+scripts/
+*.config.ts
+.vscode/
+setup_*.py
+node_modules/
