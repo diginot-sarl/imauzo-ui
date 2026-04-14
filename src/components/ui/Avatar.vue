@@ -27,23 +27,23 @@ const onImageError = () => {
 }
 
 const sizeClass = computed(() => {
-  const sizes = { 
+  const sizes: Record<string, string> = { 
     xs: 'w-8 h-8 text-xs', 
     sm: 'w-10 h-10 text-sm', 
     md: 'w-12 h-12 text-base', 
     lg: 'w-16 h-16 text-lg', 
     xl: 'w-24 h-24 text-2xl' 
   }
-  return sizes[props.size]
+  return sizes[props.size] || sizes['md']
 })
 
 const shapeClass = computed(() => {
-  const shapes = { 
+  const shapes: Record<string, string> = { 
     circle: 'rounded-full', 
     square: 'rounded-xl', 
     squircle: 'mask mask-squircle' 
   }
-  return shapes[props.shape]
+  return shapes[props.shape] || shapes['circle']
 })
 
 const statusClass = computed(() => {

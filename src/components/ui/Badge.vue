@@ -12,19 +12,28 @@ const props = withDefaults(defineProps<Props>(), {
 <template>
     <div class="badge font-semibold text-[12px] px-2.5 py-3" :class="[
         outline ? 'badge-outline' : 'border-transparent',
-        !outline && variant === 'primary' ? 'bg-[#0866FF] text-white' : '',
-        !outline && variant === 'secondary' ? 'bg-[#E4E6EB] text-[#050505]' : '',
-        !outline && variant === 'success' ? 'bg-[#E7F3EB] text-[#2FA14A]' : '',
-        !outline && variant === 'warning' ? 'bg-[#FFF5E5] text-[#D88A00]' : '',
-        !outline && variant === 'error' ? 'bg-[#FDECEE] text-[#E02636]' : '',
-        !outline && variant === 'neutral' ? 'bg-[#323436] text-white' : '',
-        !outline && variant === 'ghost' ? 'bg-transparent text-[#65676B]' : '',
-
-        outline && variant === 'primary' ? 'text-[#0866FF] border-[#0866FF]' : '',
-        outline && variant === 'secondary' ? 'text-[#65676B] border-[#CED0D4]' : '',
-        outline && variant === 'success' ? 'text-[#2FA14A] border-[#2FA14A]' : '',
-        outline && variant === 'warning' ? 'text-[#D88A00] border-[#D88A00]' : '',
-        outline && variant === 'error' ? 'text-[#E02636] border-[#E02636]' : ''
+        (function() {
+            const v = ['primary', 'secondary', 'success', 'warning', 'error', 'ghost', 'neutral'].includes(variant as string) ? variant : 'primary';
+            
+            if (!outline) {
+                if (v === 'primary') return 'bg-primary text-white';
+                if (v === 'secondary') return 'bg-secondary text-text-primary';
+                if (v === 'success') return 'bg-success/20 text-success';
+                if (v === 'warning') return 'bg-warning/20 text-warning';
+                if (v === 'error') return 'bg-danger/20 text-danger';
+                if (v === 'neutral') return 'bg-[#323436] text-white';
+                if (v === 'ghost') return 'bg-transparent text-text-secondary';
+            } else {
+                if (v === 'primary') return 'text-primary border-primary';
+                if (v === 'secondary') return 'text-text-secondary border-base-border';
+                if (v === 'success') return 'text-success border-success';
+                if (v === 'warning') return 'text-warning border-warning';
+                if (v === 'error') return 'text-danger border-danger';
+                if (v === 'neutral') return 'text-[#323436] border-[#323436]';
+                if (v === 'ghost') return 'text-text-secondary border-transparent';
+            }
+            return '';
+        })()
     ]">
         <slot></slot>
     </div>

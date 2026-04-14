@@ -20,16 +20,21 @@ const sizes = {
     xl: 'w-8 h-8'
 }
 
-const colors = {
-    default: 'text-[#050505]',
-    primary: 'text-[#0866FF]',
-    secondary: 'text-[#65676B]',
-    danger: 'text-[#E02636]',
-    success: 'text-[#2FA14A]',
-    warning: 'text-[#D88A00]'
+const colors: Record<string, string> = {
+    default: 'text-text-primary',
+    primary: 'text-primary',
+    secondary: 'text-text-secondary',
+    danger: 'text-danger',
+    success: 'text-success',
+    warning: 'text-warning'
 }
 </script>
 
 <template>
-    <component :is="icon" :class="cn('shrink-0', sizes[size], colors[color], props.class)" />
+    <component :is="icon" :class="cn(
+        'shrink-0', 
+        sizes[size] || sizes['md'], 
+        colors[color] || colors['default'], 
+        props.class
+    )" />
 </template>

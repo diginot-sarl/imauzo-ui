@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { cn } from '../../lib/utils'
 
 const buttonVariants = cva(
@@ -8,12 +8,12 @@ const buttonVariants = cva(
     {
         variants: {
             variant: {
-                primary: 'bg-[#0866FF] hover:bg-[#075ce5] active:bg-[#0650c9] text-white shadow-sm',
-                secondary: 'bg-[#E4E6EB] hover:bg-[#D8DADF] active:bg-[#CCD0D5] text-[#050505]',
-                ghost: 'bg-transparent hover:bg-[#F2F2F2] active:bg-[#E4E6EB] text-[#65676B]',
-                danger: 'bg-[#E41E3F] hover:bg-[#C91A39] active:bg-[#B01732] text-white shadow-sm',
-                success: 'bg-[#2FA14A] hover:bg-[#288C40] active:bg-[#207033] text-white shadow-sm',
-                outline: 'bg-transparent border-2 border-[#CED0D4] hover:border-[#8D949E] text-[#050505] active:bg-[#F2F2F2]',
+                primary: 'bg-primary hover:bg-primary-hover active:bg-primary-active text-white shadow-sm',
+                secondary: 'bg-secondary hover:bg-secondary-hover active:bg-secondary-active text-text-primary',
+                ghost: 'bg-transparent hover:bg-ghost-hover active:bg-ghost-active text-text-secondary',
+                danger: 'bg-danger hover:bg-danger-hover active:bg-danger-active text-white shadow-sm',
+                success: 'bg-success hover:bg-success-hover active:bg-success-active text-white shadow-sm',
+                outline: 'bg-transparent border-2 border-base-border hover:border-base-border-hover text-text-primary active:bg-ghost-hover',
             },
             size: {
                 xs: 'h-8 px-3 text-[13px] rounded-md',
@@ -30,11 +30,12 @@ const buttonVariants = cva(
     }
 )
 
-type ButtonProps = VariantProps<typeof buttonVariants>
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success' | 'outline'
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface Props {
-    variant?: ButtonProps['variant']
-    size?: ButtonProps['size']
+    variant?: ButtonVariant
+    size?: ButtonSize
     loading?: boolean
     disabled?: boolean
     type?: 'button' | 'submit' | 'reset'
@@ -53,17 +54,25 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots()
 
-const buttonClass = computed(() => cn(
-    buttonVariants({ variant: props.variant, size: props.size }), 
-    props.block ? 'w-full' : '',
-    (props.disabled || props.loading) ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
-    props.class
-))
+const VALID_VARIANTS: ButtonVariant[] = ['primary', 'secondary', 'ghost', 'danger', 'success', 'outline']
+const VALID_SIZES: ButtonSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
+
+const buttonClass = computed(() => {
+    const safeVariant = VALID_VARIANTS.includes(props.variant as ButtonVariant) ? props.variant : 'primary'
+    const safeSize = VALID_SIZES.includes(props.size as ButtonSize) ? props.size : 'md'
+    
+    return cn(
+        buttonVariants({ variant: safeVariant, size: safeSize }), 
+        props.block ? 'w-full' : '',
+        (props.disabled || props.loading) ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
+        props.class
+    )
+})
 </script>
 
 <template>
     <button :type="type" :class="buttonClass" :disabled="disabled || loading">
-        <!-- Spinner natif DaisyUI -->
+        <!-- Spinner DaisyUI Natif -->
         <span v-if="loading" class="loading loading-spinner text-current"></span>
         
         <!-- Prefix Slot -->

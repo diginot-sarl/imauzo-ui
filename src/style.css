@@ -1,10 +1,37 @@
 @import "tailwindcss";
+@source "./**/*.vue";
 @plugin "daisyui";
 
 @theme {
-  --color-primary: #0866ff; /* Nouveau bleu Facebook */
-  --color-primary-content: #ffffff;
+  --color-primary: #0866ff;
+  --color-primary-hover: #075ce5;
+  --color-primary-active: #0650c9;
+  
+  --color-secondary: #E4E6EB;
+  --color-secondary-hover: #D8DADF;
+  --color-secondary-active: #CCD0D5;
+  
+  --color-danger: #E41E3F;
+  --color-danger-hover: #C91A39;
+  --color-danger-active: #B01732;
+  
+  --color-success: #2FA14A;
+  --color-success-hover: #288C40;
+  --color-success-active: #207033;
+  
+  --color-warning: #D88A00;
+  --color-warning-hover: #c47c00;
+  
+  --color-base-border: #CED0D4;
+  --color-base-border-hover: #8D949E;
+  
+  --color-text-primary: #050505;
+  --color-text-secondary: #65676B;
+  
+  --color-ghost-hover: #F2F2F2;
+  --color-ghost-active: #E4E6EB;
 
+  --color-primary-content: #ffffff;
   --color-base-100: #ffffff;
   --color-base-200: #f0f2f5; /* Fond principal FB */
   --color-base-300: #e4e6eb; /* Boutons secondaires / Hover FB */

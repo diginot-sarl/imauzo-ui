@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { cn } from '../../lib/utils'
-
 defineProps<{
     modelValue: number | string
     min?: number | string
@@ -14,18 +12,18 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <input 
+    <input 
       type="range" 
       :min="min || 0" 
       :max="max || 100" 
       :step="step || 1"
       :value="modelValue"
       @input="emit('update:modelValue', Number(($event.target as HTMLInputElement).value))"
-      :class="cn(
+      :class="[
           'range', 
-          color ? `range-${color}` : 'range-primary',
-          size ? `range-${size}` : 'range-md',
+          ['primary', 'secondary', 'accent', 'success', 'warning', 'error'].includes(color as string) ? `range-${color}` : 'range-primary',
+          ['xs', 'sm', 'md', 'lg'].includes(size as string) ? `range-${size}` : 'range-md',
           $attrs.class
-      )"
+      ]"
   />
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { cn } from '../../lib/utils'
 
 const iconButtonVariants = cva(
@@ -8,12 +8,12 @@ const iconButtonVariants = cva(
     {
         variants: {
             variant: {
-                primary: 'bg-[#0866FF] hover:bg-[#075ce5] active:bg-[#0650c9] text-white shadow-sm',
-                secondary: 'bg-[#E4E6EB] hover:bg-[#D8DADF] active:bg-[#CCD0D5] text-[#050505]',
-                ghost: 'bg-transparent hover:bg-[#F0F2F5] active:bg-[#E4E6EB] text-[#65676B]',
-                danger: 'bg-[#E41E3F] hover:bg-[#C91A39] active:bg-[#B01732] text-white shadow-sm',
-                success: 'bg-[#2FA14A] hover:bg-[#288C40] active:bg-[#207033] text-white shadow-sm',
-                outline: 'bg-transparent border-2 border-[#CED0D4] hover:border-[#8D949E] text-[#050505] active:bg-[#F2F2F2]',
+                primary: 'bg-primary hover:bg-primary-hover active:bg-primary-active text-white shadow-sm',
+                secondary: 'bg-secondary hover:bg-secondary-hover active:bg-secondary-active text-text-primary',
+                ghost: 'bg-transparent hover:bg-ghost-hover active:bg-ghost-active text-text-secondary',
+                danger: 'bg-danger hover:bg-danger-hover active:bg-danger-active text-white shadow-sm',
+                success: 'bg-success hover:bg-success-hover active:bg-success-active text-white shadow-sm',
+                outline: 'bg-transparent border-2 border-base-border hover:border-base-border-hover text-text-primary active:bg-ghost-hover',
             },
             size: {
                 xs: 'w-8 h-8',       // Icons should ideally be w-4
@@ -30,11 +30,12 @@ const iconButtonVariants = cva(
     }
 )
 
-type IconButtonProps = VariantProps<typeof iconButtonVariants>
+export type IconButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success' | 'outline'
+export type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface Props {
-    variant?: IconButtonProps['variant']
-    size?: IconButtonProps['size']
+    variant?: IconButtonVariant
+    size?: IconButtonSize
     loading?: boolean
     disabled?: boolean
     type?: 'button' | 'submit' | 'reset'
@@ -49,11 +50,19 @@ const props = withDefaults(defineProps<Props>(), {
     type: 'button',
 })
 
-const buttonClass = computed(() => cn(
-    iconButtonVariants({ variant: props.variant, size: props.size }), 
-    (props.disabled || props.loading) ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
-    props.class
-))
+const VALID_VARIANTS: IconButtonVariant[] = ['primary', 'secondary', 'ghost', 'danger', 'success', 'outline']
+const VALID_SIZES: IconButtonSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
+
+const buttonClass = computed(() => {
+    const safeVariant = VALID_VARIANTS.includes(props.variant as IconButtonVariant) ? props.variant : 'ghost'
+    const safeSize = VALID_SIZES.includes(props.size as IconButtonSize) ? props.size : 'md'
+
+    return cn(
+        iconButtonVariants({ variant: safeVariant, size: safeSize }), 
+        (props.disabled || props.loading) ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
+        props.class
+    )
+})
 </script>
 
 <template>

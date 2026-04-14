@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { cn } from '../../lib/utils'
 
 interface Props {
@@ -15,12 +14,12 @@ const props = withDefaults(defineProps<Props>(), {
     weight: 'normal'
 })
 
-const variants = {
-    primary: 'text-[#050505]',
-    secondary: 'text-[#65676B]',
-    hint: 'text-[#65676B] italic',
-    error: 'text-[#E02636]',
-    success: 'text-[#2FA14A]'
+const variants: Record<string, string> = {
+    primary: 'text-text-primary',
+    secondary: 'text-text-secondary',
+    hint: 'text-text-secondary italic',
+    error: 'text-danger',
+    success: 'text-success'
 }
 
 const sizes = {
@@ -39,7 +38,12 @@ const weights = {
 </script>
 
 <template>
-    <p :class="cn(variants[variant], sizes[size], weights[weight], props.class)">
+    <p :class="cn(
+        variants[variant] || variants['primary'], 
+        sizes[size] || sizes['md'], 
+        weights[weight] || weights['normal'], 
+        props.class
+    )">
         <slot />
     </p>
 </template>
