@@ -32,9 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
                 class="w-[280px] h-full bg-[#FFFFFF] shadow-[1px_0_4px_rgba(0,0,0,0.05)] border-r border-[#CED0D4]/40 flex flex-col overflow-hidden">
                 <!-- Logo / Header de Sidebar -->
                 <div class="h-[56px] flex items-center px-4 border-b border-[#CED0D4] lg:border-transparent">
-                    <slot name="sidebar-header">
-                        <div class="font-bold text-[#0866FF] text-xl">App</div>
-                    </slot>
+                    <slot name="sidebar-header" />
                 </div>
 
                 <!-- Contenu de la sidebar (les liens) -->
