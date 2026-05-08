@@ -9,11 +9,11 @@ interface Props {
     options: Tab[]
     modelValue: string | number
     fullWidth?: boolean
-    variant?: 'bordered' | 'pills' | 'premium'
+    variant?: 'bordered' | 'pills' | 'elite'
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    variant: 'pills'
+    variant: 'bordered'
 })
 
 const emit = defineEmits<{
@@ -34,7 +34,7 @@ const emit = defineEmits<{
                     modelValue === tab.value
                         ? 'font-semibold text-[#0866FF] border-[#0866FF]'
                         : 'text-[#65676B] hover:text-[#050505] hover:bg-[#F0F2F5]/50 border-transparent'
-                ] : variant === 'premium' ? [
+                ] : variant === 'elite' ? [
                     'h-11 px-5 rounded-xl font-bold text-[14px]',
                     modelValue === tab.value
                         ? 'bg-[#1C1E21] text-white shadow-sm'
