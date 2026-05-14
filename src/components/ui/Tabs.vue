@@ -35,7 +35,7 @@ const emit = defineEmits<{
                         ? 'font-semibold text-[#0866FF] border-[#0866FF]'
                         : 'text-[#65676B] hover:text-[#050505] hover:bg-[#F0F2F5]/50 border-transparent'
                 ] : variant === 'elite' ? [
-                    'h-8 px-4 rounded-xl font-bold text-[14px]',
+                    'h-10 px-4 rounded-xl font-bold text-[14px]',
                     modelValue === tab.value
                         ? 'bg-[#1C1E21] text-white shadow-sm'
                         : 'text-[#65676B] hover:bg-[#F0F2F5] hover:text-[#1C1E21]'
